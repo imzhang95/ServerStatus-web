@@ -65,7 +65,7 @@ const App: React.FC<any> = () => {
         .catch((e) => console.log("错误:", e));
     };
     fetchData();
-    let itv = setInterval(fetchData, 5000);
+    let itv = setInterval(fetchData, 3000);
     return () => {
       clearInterval(itv);
     };
