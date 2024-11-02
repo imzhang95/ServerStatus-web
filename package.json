@@ -14,13 +14,13 @@
   },
   "homepage": ".",
   "bugs": {
-    "url": "https://github.com/krwu/ServerStatus-web/issues"
+    "url": "https://github.com/imzhang95/ServerStatus-web/issues"
   },
   "license": "WTFPL",
-  "author": "Kairee <kairee@udev.bid> (https://www.ofcss.com/)",
+  "author": "Zhang95",
   "repository": {
     "type": "git",
-    "url": "https://github.com/krwu/ServerStatus-web.git"
+    "url": "https://github.com/imzhang95/ServerStatus-web.git"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
