@@ -75,7 +75,7 @@ const App: React.FC<any> = () => {
     <div className="App">
       {initDone && (<Layout>
         <Header>
-          <div className="logo">ServerStatus</div>
+          <div className="logo">Status</div>
         </Header>
         <Content style={{ background: "#fff" }}>
           <Row justify="center">
@@ -92,21 +92,7 @@ const App: React.FC<any> = () => {
         </Content>
         <Footer className="footer">
           <a target="_blank" href="/detail">🗂️</a>
-          {" | "}
-          <a
-            href="https://github.com/krwu/ServerStatus-web"
-            rel="external noopener"
-          >
-            WebUI
-          </a>{" "}
-          for{" "}
-          <a
-            href="https://github.com/zdz/ServerStatus-Rust"
-            rel="external noopener"
-          >
-            ServerStatus
-          </a>
-          {" | "}
+          {" | ServerStatus-Rust | "}
           <a target="_blank" href="/map">🗺️</a>
         </Footer>
       </Layout>
