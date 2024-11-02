@@ -91,6 +91,8 @@ const App: React.FC<any> = () => {
           </Row>
         </Content>
         <Footer className="footer">
+          <a target="_blank" href="/detail">🗂️</a>
+          {" | "}
           <a
             href="https://github.com/krwu/ServerStatus-web"
             rel="external noopener"
@@ -99,15 +101,13 @@ const App: React.FC<any> = () => {
           </a>{" "}
           for{" "}
           <a
-            href="https://github.com/BotoX/ServerStatus/"
+            href="https://github.com/zdz/ServerStatus-Rust"
             rel="external noopener"
           >
             ServerStatus
           </a>
-          , made by{" "}
-          <a href="https://www.ofcss.com/" rel="external noopener">
-            Kairee
-          </a>
+          {" | "}
+          <a target="_blank" href="/map">🗺️</a>
         </Footer>
       </Layout>
       )}
