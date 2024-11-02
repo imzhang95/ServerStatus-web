@@ -22,6 +22,8 @@ interface RawData {
   load_1: number;
   load_5: number;
   load_15: number;
+  'network_rx': number;
+  'network_tx': number;
   'network_in': number;
   'network_out': number;
   cpu: number;
