@@ -1,4 +1,4 @@
-# Web UI for ServerStatus 20241103
+# Web UI for ServerStatus 20241103-002
 
 **English** | [简体中文](README.zh_CN.md)
 
