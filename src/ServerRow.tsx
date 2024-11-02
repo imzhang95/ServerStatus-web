@@ -14,14 +14,16 @@ import {
 interface RawData {
   name: string;
   type: string;
-  host: string;
+  alias: string;
   location: string;
   online4: boolean;
   online6: boolean;
   uptime: string;
-  load: number;
-  'network_rx': number;
-  'network_tx': number;
+  load_1: number;
+  load_5: number;
+  load_15: number;
+  'network_in': number;
+  'network_out': number;
   cpu: number;
   memory_total: number;
   memory_used: number;
@@ -40,11 +42,6 @@ interface SergateData {
 function onlineTag(online: boolean, label: string): React.ReactElement {
   //return <Tag color={online ? '#87d068' : '#f50'}>{online ? 'O N' : 'OFF'}</Tag>;
   return online ? <CheckCircleFilled /> : <WarningFilled />;
-}
-
-function transUptime(uptime: string): string {
-  uptime = uptime || '';
-  return uptime.replace(/days|day/, intl.get('DAYS'));
 }
 
 function networkUnit(network: number): string {
@@ -115,13 +112,6 @@ function formatDateTime(time: Date) {
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
-interface FlagProps {
-  loc: string
-}
-const Flag: React.FC<FlagProps> = ({ loc }: FlagProps) => (
-  <i className={`flag-icon flag-icon-${loc.toLowerCase()}`} />
-);
-
 const ServerRow: React.FC<SergateData> = (props: SergateData) => {
   let { servers, updated } = props;
 
@@ -147,15 +137,15 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
         <Col xs={4} sm={3} md={3} lg={3}>{intl.get('HDD')}</Col>
       </Row>
       {servers && servers.length > 0 ? servers.map((server) => (
-        <Row key={server.host} className="sr-body" justify="space-around" gutter={10}>
+        <Row key={server.name} className="sr-body" justify="space-around" gutter={10}>
           <span className="col-num">{idx++}</span>
           <Col xs={3} sm={3} md={1} lg={1}>{onlineTag(server.online4, 'IPv4')}</Col>
           <Col xs={0} sm={0} md={1} lg={1}>{onlineTag(server.online6, 'IPv6')}</Col>
-          <Col xs={5} sm={4} md={2} lg={2}>{server.host || server.name}</Col>
+          <Col xs={5} sm={4} md={2} lg={2}>{server.alias || server.name}</Col>
           <Col xs={0} sm={2} md={2} lg={2}>{server.type}</Col>
-          <Col xs={2} sm={2} md={1} lg={1}><Flag loc={server.location} /></Col>
-          <Col xs={4} sm={4} md={3} lg={2}>{transUptime(server.uptime)}</Col>
-          <Col xs={0} sm={0} md={0} lg={1}>{server.load}</Col>
+          <Col xs={2} sm={2} md={1} lg={1}>{server.location}</Col>
+          <Col xs={4} sm={4} md={3} lg={2}>{server.uptime}</Col>
+          <Col xs={0} sm={0} md={0} lg={1}>{server.load_1}</Col>
           <Col xs={0} sm={0} md={5} lg={4}>
             {networkUnit(server.network_rx)}
             ↓ | ↑
