@@ -52,8 +52,10 @@ function networkUnit(network: number): string {
     return `${network.toFixed(0)}B`;
   } if (network < 1000 * 1000) {
     return `${(network / 1000).toFixed(0)}K`;
+  } if (network < 1000 * 1000 * 1000) {
+    return `${(network / 1000 / 1000).toFixed(0)}M`;
   }
-  return `${(network / 1000 / 1000).toFixed(0)}M`;
+  return `${(network / 1000 / 1000 / 1000).toFixed(0)}G`;
 }
 
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
