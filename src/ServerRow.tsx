@@ -87,6 +87,11 @@ function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   return `${(bytes / terabyte).toFixed(precision)}T`;
 }
 
+function monthTraffic(BandValue: number, lastBandValue: number): string {
+  const trafficDiff = BandValue - lastBandValue;
+  return bytesToSize(trafficDiff);
+}
+
 function memTips(props: RawData): ReactNode {
   const {
     memory_used, memory_total, swap_used, swap_total,
@@ -160,9 +165,9 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
             {networkUnit(server.network_tx)}
           </Col>
           <Col xs={0} sm={0} md={4} lg={3}>
-            {networkUnit(server.network_rx)}
+            {monthTraffic(server.network_in, server.last_network_in)}
             ↓ | ↑
-            {networkUnit(server.network_tx)}
+            {monthTraffic(server.network_out, server.last_network_out)}
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
             <Tooltip placement="left" title={server.labels}>
