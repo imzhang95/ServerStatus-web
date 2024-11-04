@@ -157,14 +157,14 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={2} sm={2} md={1} lg={1}>{server.location}</Col>
           <Col xs={4} sm={4} md={3} lg={2}>{server.uptime}</Col>
           <Col xs={0} sm={0} md={0} lg={1}>{server.load_1}</Col>
-          <Col xs={0} sm={0} md={4} lg={3}>
+          <Col xs={0} sm={0} md={4} lg={3} style={{ whiteSpace: 'nowrap' }}>
             {networkUnit(server.network_rx)}
-            ↓ | ↑
+             | 
             {networkUnit(server.network_tx)}
           </Col>
-          <Col xs={0} sm={0} md={4} lg={3}>
+          <Col xs={0} sm={0} md={4} lg={3} style={{ whiteSpace: 'nowrap' }}>
             {monthTraffic(server.network_in, server.last_network_in)}
-            ↓ | ↑
+             | 
             {monthTraffic(server.network_out, server.last_network_out)}
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
