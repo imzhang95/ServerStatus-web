@@ -5,6 +5,7 @@
   "UPTIME": "运行",
   "LOAD": "负载",
   "NETWORK": "网络",
+  "TRAFFIC": "流量", 
   "CPU": "CPU",
   "RAM": "RAM",
   "HDD": "HDD",
