@@ -165,7 +165,9 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
             {networkUnit(server.network_tx)}
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
-            <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={server.cpu} status="active" />
+            <Tooltip placement="left" title={server.labels}>
+              <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={server.cpu} status="active" />
+            </Tooltip>
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
             <Tooltip placement="left" title={memTips(server)}>
