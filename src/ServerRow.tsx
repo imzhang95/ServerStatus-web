@@ -49,14 +49,11 @@ function onlineTag(online: boolean, label: string): React.ReactElement {
   return online ? <CheckCircleFilled /> : <WarningFilled />;
 }
 
-function networkUnit(network: number, width: number = 4): string {
-  // Format network value with padding for alignment
-  const formatted = network < 1000 ? `${network}B`
-    : network < 1000 * 1000 ? `${(network / 1000).toFixed(0)}K`
-    : network < 1000 * 1000 * 1000 ? `${(network / 1000 / 1000).toFixed(0)}M`
-    : `${(network / 1000 / 1000 / 1000).toFixed(0)}G`;
-
-  return formatted.padStart(width);
+function networkUnit(network: number): string {
+  if (network < 1000) return `${network}B`;
+  if (network < 1000 * 1000) return `${(network / 1000).toFixed(0)}K`;
+  if (network < 1000 * 1000 * 1000) return `${(network / 1000 / 1000).toFixed(0)}M`;
+  return `${(network / 1000 / 1000 / 1000).toFixed(0)}G`;
 }
 
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
@@ -85,9 +82,9 @@ function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   return `${(bytes / terabyte).toFixed(precision)}T`;
 }
 
-function monthTraffic(BandValue: number, lastBandValue: number, width: number = 6): string {
-  const trafficDiff = (BandValue - lastBandValue) / 1024;
-  return networkUnit(trafficDiff, width);
+function monthTraffic(BandValue: number, lastBandValue: number): string {
+  const trafficDiff = BandValue - lastBandValue;
+  return networkUnit(trafficDiff);
 }
 
 function memTips(props: RawData): ReactNode {
@@ -157,15 +154,15 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={2} sm={2} md={1} lg={1}>{server.location}</Col>
           <Col xs={4} sm={4} md={3} lg={2}>{server.uptime}</Col>
           <Col xs={0} sm={0} md={0} lg={1}>{server.load_1}</Col>
-          <Col xs={0} sm={0} md={4} lg={3} style={{ whiteSpace: 'nowrap' }}>
-            {networkUnit(server.network_rx)}
-             | 
-            {networkUnit(server.network_tx)}
+          <Col xs={0} sm={0} md={4} lg={3} style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>{networkUnit(server.network_rx)}</span>
+            <span>|</span>
+            <span>{networkUnit(server.network_tx)}</span>
           </Col>
-          <Col xs={0} sm={0} md={4} lg={3} style={{ whiteSpace: 'nowrap' }}>
-            {monthTraffic(server.network_in, server.last_network_in)}
-             | 
-            {monthTraffic(server.network_out, server.last_network_out)}
+          <Col xs={0} sm={0} md={4} lg={3} style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>{monthTraffic(server.network_in, server.last_network_in)}</span>
+            <span>|</span>
+            <span>{monthTraffic(server.network_out, server.last_network_out)}</span>
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
             <Tooltip placement="left" title={server.labels}>
