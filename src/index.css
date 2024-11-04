@@ -81,13 +81,15 @@ body {
 
 .network-traffic-col span {
   display: inline-block;
-  .network-value-in {
-    text-align: right;
-  }
-  .network-value-out {
-    text-align: left;
-  }  
 }
+
+.network-traffic-col .network-value-in {
+    text-align: right;
+}
+.network-traffic-col .network-value-out {
+    text-align: left;
+}
+
 
 @media (max-width: 768px) {
   .logo {
