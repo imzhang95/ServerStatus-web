@@ -111,10 +111,10 @@ body {
 
 @media (min-width: 769px) {
   .network-traffic-col .network-value-in {
-    min-width: 40px; 
+    min-width: 50px; 
   }
   .network-traffic-col .network-value-out {
-    min-width: 40px; 
+    min-width: 50px; 
   }
   .network-traffic-col .separator {
     margin: 0 5px;
