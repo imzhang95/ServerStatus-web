@@ -79,9 +79,14 @@ body {
   justify-content: center;
 }
 
-.network-traffic-col span {
+.network-traffic-col span .network-value-in {
   display: inline-block;
   text-align: right;
+}
+
+.network-traffic-col span .network-value-out {
+  display: inline-block;
+  text-align: left;
 }
 
 @media (max-width: 768px) {
@@ -103,8 +108,11 @@ body {
 }
 
 @media (min-width: 769px) {
-  .network-traffic-col .network-value {
-    min-width: 50px; /* 控制最小宽度 */
+  .network-traffic-col .network-value-in {
+    min-width: 40px; 
+  }
+  .network-traffic-col .network-value-out {
+    min-width: 40px; 
   }
   .network-traffic-col .separator {
     margin: 0 5px;
