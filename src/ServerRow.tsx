@@ -50,10 +50,10 @@ function onlineTag(online: boolean, label: string): React.ReactElement {
 }
 
 function networkUnit(network: number): string {
-  if (network < 1000) return `${network}B`.padStart(5, ' ');
-  if (network < 1000 * 1000) return `${(network / 1000).toFixed(0)}K`.padStart(5, ' ');
-  if (network < 1000 * 1000 * 1000) return `${(network / 1000 / 1000).toFixed(0)}M`.padStart(5, ' ');
-  return `${(network / 1000 / 1000 / 1000).toFixed(0)}G`.padStart(5, ' ');
+  if (network < 1000) return `${network}B`;
+  if (network < 1000 * 1000) return `${(network / 1000).toFixed(0)}K`;
+  if (network < 1000 * 1000 * 1000) return `${(network / 1000 / 1000).toFixed(0)}M`;
+  return `${(network / 1000 / 1000 / 1000).toFixed(0)}G`;
 }
 
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
@@ -154,15 +154,15 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={2} sm={2} md={1} lg={1}>{server.location}</Col>
           <Col xs={4} sm={4} md={3} lg={2}>{server.uptime}</Col>
           <Col xs={0} sm={0} md={0} lg={1}>{server.load_1}</Col>
-          <Col xs={0} sm={0} md={4} lg={3} style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>{networkUnit(server.network_rx)}</span>
+          <Col xs={0} sm={0} md={4} lg={3} style={{ display: 'flex', justifyContent: 'center', fontFamily: 'monospace' }}>
+            <span style={{ textAlign: 'right', width: '50px' }}>{networkUnit(server.network_rx)}</span>
             <span style={{ margin: '0 5px' }}>|</span>
-            <span>{networkUnit(server.network_tx)}</span>
+            <span style={{ textAlign: 'left', width: '50px' }}>{networkUnit(server.network_tx)}</span>
           </Col>
-          <Col xs={0} sm={0} md={4} lg={3} style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>{monthTraffic(server.network_in, server.last_network_in)}</span>
+          <Col xs={0} sm={0} md={4} lg={3} style={{ display: 'flex', justifyContent: 'center', fontFamily: 'monospace' }}>
+            <span style={{ textAlign: 'right', width: '50px' }}>{monthTraffic(server.network_in, server.last_network_in)}</span>
             <span style={{ margin: '0 5px' }}>|</span>
-            <span>{monthTraffic(server.network_out, server.last_network_out)}</span>
+            <span style={{ textAlign: 'left', width: '50px' }}>{monthTraffic(server.network_out, server.last_network_out)}</span>
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
             <Tooltip placement="left" title={server.labels}>
