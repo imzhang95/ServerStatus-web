@@ -1,7 +1,7 @@
 {
   "NAME": "Name",
   "TYPE": "Type",
-  "LOC": "Location",
+  "LOC": "Region",
   "UPTIME": "Uptime",
   "LOAD": "Load",
   "NETWORK": "Network",
