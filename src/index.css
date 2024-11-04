@@ -79,14 +79,14 @@ body {
   justify-content: center;
 }
 
-.network-traffic-col span .network-value-in {
+.network-traffic-col span {
   display: inline-block;
-  text-align: right;
-}
-
-.network-traffic-col span .network-value-out {
-  display: inline-block;
-  text-align: left;
+  .network-value-in {
+    text-align: right;
+  }
+  .network-value-out {
+    text-align: left;
+  }  
 }
 
 @media (max-width: 768px) {
