@@ -88,7 +88,7 @@ function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
 }
 
 function monthTraffic(BandValue: number, lastBandValue: number): string {
-  const trafficDiff = BandValue - lastBandValue;
+  const trafficDiff = (BandValue - lastBandValue) / 1024;
   return bytesToSize(trafficDiff);
 }
 
