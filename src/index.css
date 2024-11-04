@@ -74,6 +74,16 @@ body {
   text-decoration: underline;
 }
 
+.network-traffic-col {
+  display: flex;
+  justify-content: center;
+}
+
+.network-traffic-col span {
+  display: inline-block;
+  text-align: right;
+}
+
 @media (max-width: 768px) {
   .logo {
     text-align: center;
@@ -86,6 +96,18 @@ body {
   }
   .sergate .ant-tag {
     margin-right: 0;
+  }
+  .network-traffic-col {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .network-traffic-col .network-value {
+    min-width: 50px; /* 控制最小宽度 */
+  }
+  .network-traffic-col .separator {
+    margin: 0 5px;
   }
 }
 
