@@ -162,14 +162,14 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={4} sm={4} md={3} lg={2}>{server.uptime}</Col>
           <Col xs={0} sm={0} md={0} lg={1}>{server.load_1}</Col>
           <Col xs={0} sm={0} md={4} lg={3} className="network-traffic-col">
-            <span className="network-value">{networkUnit(server.network_rx)}</span>
+            <span className="network-value-in">{networkUnit(server.network_rx)}</span>
             <span className="separator">|</span>
-            <span className="network-value">{networkUnit(server.network_tx)}</span>
+            <span className="network-value-out">{networkUnit(server.network_tx)}</span>
           </Col>
           <Col xs={0} sm={0} md={4} lg={3} className="network-traffic-col">
-            <span className="network-value">{monthTraffic(server.network_in, server.last_network_in)}</span>
+            <span className="network-value-in">{monthTraffic(server.network_in, server.last_network_in)}</span>
             <span className="separator">|</span>
-            <span className="network-value">{monthTraffic(server.network_out, server.last_network_out)}</span>
+            <span className="network-value-out">{monthTraffic(server.network_out, server.last_network_out)}</span>
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
             <Tooltip placement="left" title={server.labels}>
