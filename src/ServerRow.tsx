@@ -82,7 +82,7 @@ function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   return `${(bytes / terabyte).toFixed(precision)}T`;
 }
 
-function monthTraffic(BandValue: number, lastBandValue: number): string {
+function monthTraffic(BandValue: number, lastBandValue: number, precision: number = 1): string {
   const trafficDiff = BandValue - lastBandValue;
   return networkUnit(trafficDiff, precision=1);
 }
