@@ -5,6 +5,7 @@
   "UPTIME": "Uptime",
   "LOAD": "Load",
   "NETWORK": "Network",
+  "TRAFFIC": "Traffic",
   "CPU": "CPU",
   "RAM": "RAM",
   "HDD": "HDD",
