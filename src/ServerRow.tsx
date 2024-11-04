@@ -49,16 +49,14 @@ function onlineTag(online: boolean, label: string): React.ReactElement {
   return online ? <CheckCircleFilled /> : <WarningFilled />;
 }
 
-function networkUnit(network: number): string {
-  network = network || 0;
-  if (network < 1000) {
-    return `${network.toFixed(0)}B`;
-  } if (network < 1000 * 1000) {
-    return `${(network / 1000).toFixed(0)}K`;
-  } if (network < 1000 * 1000 * 1000) {
-    return `${(network / 1000 / 1000).toFixed(0)}M`;
-  }
-  return `${(network / 1000 / 1000 / 1000).toFixed(0)}G`;
+function networkUnit(network: number, width: number = 4): string {
+  // Format network value with padding for alignment
+  const formatted = network < 1000 ? `${network}B`
+    : network < 1000 * 1000 ? `${(network / 1000).toFixed(0)}K`
+    : network < 1000 * 1000 * 1000 ? `${(network / 1000 / 1000).toFixed(0)}M`
+    : `${(network / 1000 / 1000 / 1000).toFixed(0)}G`;
+
+  return formatted.padStart(width);
 }
 
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
@@ -87,9 +85,9 @@ function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   return `${(bytes / terabyte).toFixed(precision)}T`;
 }
 
-function monthTraffic(BandValue: number, lastBandValue: number): string {
+function monthTraffic(BandValue: number, lastBandValue: number, width: number = 6)): string {
   const trafficDiff = (BandValue - lastBandValue) / 1024;
-  return bytesToSize(trafficDiff);
+  return networkUnit(trafficDiff, width);
 }
 
 function memTips(props: RawData): ReactNode {
