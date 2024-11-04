@@ -145,8 +145,8 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
         <Col xs={2} sm={2} md={1} lg={1}>{intl.get('LOC')}</Col>
         <Col xs={4} sm={4} md={3} lg={2}>{intl.get('UPTIME')}</Col>
         <Col xs={0} sm={0} md={0} lg={1}>{intl.get('LOAD')}</Col>
-        <Col xs={0} sm={0} md={4} lg={3}>{intl.get('NETWORK')}</Col>
-        <Col xs={0} sm={0} md={4} lg={3}>{intl.get('TRAFFIC')}</Col>
+        <Col xs={0} sm={0} md={3} lg={3}>{intl.get('NETWORK')}</Col>
+        <Col xs={0} sm={0} md={0} lg={3}>{intl.get('TRAFFIC')}</Col>
         <Col xs={3} sm={3} md={3} lg={3}>{intl.get('CPU')}</Col>
         <Col xs={3} sm={3} md={3} lg={3}>{intl.get('RAM')}</Col>
         <Col xs={4} sm={3} md={3} lg={3}>{intl.get('HDD')}</Col>
