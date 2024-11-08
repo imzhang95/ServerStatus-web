@@ -49,15 +49,23 @@ function onlineTag(online: boolean, label: string): React.ReactElement {
   return online ? <CheckCircleFilled /> : <WarningFilled />;
 }
 
-function networkUnit(network: number, precision: number = 0): React.ReactNode {
+function networkUnit(network: number, precision: number = 0): string {
   if (network < 1000) return `${network}B`;
   if (network < 1000 * 1000) return `${(network / 1000).toFixed(precision)}K`;
-  if (network < 1000 * 1000 * 1000) {
-    return <span style={{ color: '#8B0000' }}>{(network / 1000 / 1000).toFixed(precision)}M</span>;
-  }
-  return <span style={{ color: '#8B0000' }}>{(network / 1000 / 1000 / 1000).toFixed(precision)}G</span>;
+  if (network < 1000 * 1000 * 1000) return `${(network / 1000 / 1000).toFixed(precision)}M`;
+  return `${(network / 1000 / 1000 / 1000).toFixed(precision)}G`;
 }
-    
+
+function netspeed(speedValue: string): ReactNode {
+  const color = speedValue.includes('M') ? '#8B0000' : 'black';
+  return <span style={{ color: color }}>{speedValue}</span>;
+}
+
+function monthTraffic(BandValue: number, lastBandValue: number, precision: number = 1): string {
+  const trafficDiff = BandValue - lastBandValue;
+  return networkUnit(trafficDiff, precision=1);
+}
+
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   const kilobyte = si === 0 ? 1024 : 1000;
   const megabyte = kilobyte * kilobyte;
@@ -82,11 +90,6 @@ function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   }
 
   return `${(bytes / terabyte).toFixed(precision)}T`;
-}
-
-function monthTraffic(BandValue: number, lastBandValue: number, precision: number = 1): string {
-  const trafficDiff = BandValue - lastBandValue;
-  return networkUnit(trafficDiff, precision=1);
 }
 
 function memTips(props: RawData): ReactNode {
@@ -164,9 +167,9 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={4} sm={4} md={3} lg={2}>{server.uptime}</Col>
           <Col xs={0} sm={0} md={0} lg={1}>{server.load_1}</Col>
           <Col xs={0} sm={0} md={3} lg={3} className="network-traffic-col">
-            <span className="network-value-in">{networkUnit(server.network_rx)}</span>
+            <span className="network-value-in">{netspeed(networkUnit(server.network_rx))}</span>
             <span className="separator">|</span>
-            <span className="network-value-out">{networkUnit(server.network_tx)}</span>
+            <span className="network-value-out">{netspeed(networkUnit(server.network_tx))}</span>
           </Col>
           <Col xs={0} sm={0} md={3} lg={3} className="network-traffic-col">
             <span className="network-value-in">{monthTraffic(server.network_in, server.last_network_in)}</span>
