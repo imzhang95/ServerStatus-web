@@ -49,13 +49,15 @@ function onlineTag(online: boolean, label: string): React.ReactElement {
   return online ? <CheckCircleFilled /> : <WarningFilled />;
 }
 
-function networkUnit(network: number, precision: number = 0): string {
+function networkUnit(network: number, precision: number = 0): React.ReactNode {
   if (network < 1000) return `${network}B`;
   if (network < 1000 * 1000) return `${(network / 1000).toFixed(precision)}K`;
-  if (network < 1000 * 1000 * 1000) return `${(network / 1000 / 1000).toFixed(precision)}M`;
-  return `${(network / 1000 / 1000 / 1000).toFixed(precision)}G`;
+  if (network < 1000 * 1000 * 1000) {
+    return <span style={{ color: '#8B0000' }}>{(network / 1000 / 1000).toFixed(precision)}M</span>;
+  }
+  return <span style={{ color: '#8B0000' }}>{(network / 1000 / 1000 / 1000).toFixed(precision)}G</span>;
 }
-
+    
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   const kilobyte = si === 0 ? 1024 : 1000;
   const megabyte = kilobyte * kilobyte;
