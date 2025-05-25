@@ -4,7 +4,7 @@
 import React, { ReactNode } from 'react';
 import intl from 'react-intl-universal';
 import {
-  Row, Col, Progress, Alert,
+  Row, Col, Progress, Tooltip, Alert,
 } from 'antd';
 import {
   CheckCircleFilled,
@@ -227,13 +227,19 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
             <span className="network-value-out">{monthTraffic(server.network_out, server.last_network_out)}</span>
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
-            <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={server.cpu} status="active" />
+            <Tooltip placement="left" title={server.labels}>
+              <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={server.cpu} status="active" />
+            </Tooltip>
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
-            <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.memory_used / server.memory_total) * 100).toFixed(1))} status="active" />
+            <Tooltip placement="left" title={memTips(server)}>
+              <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.memory_used / server.memory_total) * 100).toFixed(1))} status="active" />
+            </Tooltip>
           </Col>
           <Col xs={4} sm={3} md={3} lg={3}>
-            <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.hdd_used / server.hdd_total) * 100).toFixed(1))} status="active" />
+            <Tooltip placement="left" title={`${bytesToSize(server.hdd_used * 1024)}/${bytesToSize(server.hdd_total * 1024)}`}>
+              <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.hdd_used / server.hdd_total) * 100).toFixed(1))} status="active" />
+            </Tooltip>
           </Col>
         </Row>
       )) : (
