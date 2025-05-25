@@ -159,11 +159,7 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
       <Row className="sr-head" justify="space-around" gutter={10}>
         <Col xs={3} sm={3} md={1} lg={1}>IPv4</Col>
         <Col xs={0} sm={0} md={1} lg={1}>IPv6</Col>
-        <Col xs={5} sm={4} md={2} lg={2}>
-          <span style={{ color: isNearExpiry(server.expiry_date) ? '#8B0000' : 'inherit' }}>
-            {server.alias || server.name}
-          </span>
-        </Col>
+        <Col xs={5} sm={4} md={2} lg={2}>{intl.get('NAME')}</Col>
         <Col xs={0} sm={2} md={1} lg={1}>{intl.get('TYPE')}</Col>
         <Col xs={2} sm={2} md={1} lg={1}>{intl.get('LOC')}</Col>
         <Col xs={4} sm={4} md={3} lg={2}>{intl.get('UPTIME')}</Col>
@@ -179,7 +175,11 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <span className="col-num">{idx++}</span>
           <Col xs={3} sm={3} md={1} lg={1}>{onlineTag(server.online4, 'IPv4')}</Col>
           <Col xs={0} sm={0} md={1} lg={1}>{onlineTag(server.online6, 'IPv6')}</Col>
-          <Col xs={5} sm={4} md={2} lg={2}>{server.alias || server.name}</Col>
+          <Col xs={5} sm={4} md={2} lg={2}>
+            <span style={{ color: isNearExpiry(server.expiry_date) ? '#ff0000' : 'inherit' }}>
+              {server.alias || server.name}
+            </span>
+          </Col>
           <Col xs={0} sm={2} md={1} lg={1}>{server.type}</Col>
           <Col xs={2} sm={2} md={1} lg={1}><Flag loc={server.location} /></Col>
           <Col xs={4} sm={4} md={3} lg={2}>{server.uptime}</Col>
