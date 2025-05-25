@@ -55,14 +55,14 @@ function networkUnit(network: number, precision: number = 0): string {
   return `${(network / 1000 / 1000 / 1000).toFixed(precision)}G`;
 }
 
-function netspeed(speedValue: string): ReactNode {
-  const color = speedValue.includes('M') ? '#8B0000' : 'black';
-  return <span style={{ color: color }}>{speedValue}</span>;
+function netspeed(speed: string): JSX.Element {
+  const color = speed.includes('M') ? '#8B0000' : 'black';
+  return <span style={{ color }}>{speed}</span>;
 }
 
-function monthTraffic(BandValue: number, lastBandValue: number, precision: number = 1): string {
-  const trafficDiff = BandValue - lastBandValue;
-  return networkUnit(trafficDiff, precision);
+function monthTraffic(B: number, network: number, precision: number = 1): string {
+  const month = B - network;
+  return networkUnit(month, precision);
 }
 
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
@@ -161,7 +161,7 @@ function isNearExpiry(server: RawData): boolean {
 
     const diffTime = expiry.getTime() - currentDate.getTime();
     const diffDays = diffTime / (1000 * 3600 * 24);
-    console.log(`Server: ${server.name}, Expiry: ${expiry.toISOString()}, DiffDays: ${diffDays}`);
+    console.log(`Server: ${server.name}, Expiry: ${expiry.toISOString()}, DiffDays: ${diffDays}, IsNearExpiry: ${diffDays <= 7 && diffDays >= 0}`);
     return diffDays <= 7 && diffDays >= 0;
   } catch (e) {
     console.error('Error parsing ndd:', nddValue || 'undefined', e);
@@ -209,7 +209,7 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={0} sm={0} md={1} lg={1}>{onlineTag(server.online6, 'IPv6')}</Col>
           <Col xs={5} sm={4} md={2} lg={2}>
             <Tooltip title={`Expiry: ${server.labels.match(/ndd=((\d{4}\/\d{2}\/\d{2})|(\d{2}\/\d{2})|(\d{1,2}))/)?.[1] || 'N/A'}, Near Expiry: ${isNearExpiry(server)}`}>
-              <span style={{ color: isNearExpiry(server) ? '#ff0000 !important' : 'inherit' }}>
+              <span style={{ color: isNearExpiry(server) ? '#ff0000' : 'inherit' }}>
                 {server.alias || server.name}
               </span>
             </Tooltip>
@@ -252,7 +252,7 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           description={intl.get('WAIT')}
         />
       )}
-      {updatedInt > 0 && <Alert className="lastUpdated" type="info" message={intl.get('LAST_UPDATE', { updatedTime })} />}
+      {updated && <Alert className="lastUpdated" type="info" message={intl.get('LAST_UPDATE', { updatedTime })} />}
     </div>
   );
 };
