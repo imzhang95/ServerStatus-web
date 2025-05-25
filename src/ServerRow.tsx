@@ -113,58 +113,46 @@ function formatDateTime(time: Date) {
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
-// 从 labels 的 ndd 字段解析到期日期，支持 MM/DD（每年提醒）、DD（每月提醒）和 YYYY/MM/DD（兼容旧数据）
 function isNearExpiry(server: RawData): boolean {
   const labels = server.labels || '';
-  // 匹配 ndd=MM/DD、ndd=DD 或 ndd=YYYY/MM/DD
   const nddMatch = labels.match(/ndd=((\d{4}\/\d{2}\/\d{2})|(\d{2}\/\d{2})|(\d{1,2}))/);
   if (!nddMatch) {
-    console.warn('No ndd found in labels:', labels);
     return false;
   }
 
-  let nddValue: string | undefined = nddMatch[1]; // 捕获完整匹配（YYYY/MM/DD、MM/DD 或 DD）
+  let nddValue: string | undefined = nddMatch[1];
   try {
     let expiry: Date;
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth(); // 0-11
+    const currentMonth = currentDate.getMonth();
 
     if (nddValue.match(/^\d{4}\/\d{2}\/\d{2}$/)) {
-      // 格式为 YYYY/MM/DD（兼容旧数据）
-      expiry = new Date(nddValue.replace(/\//g, '-')); // 转换为 YYYY-MM-DD
+      expiry = new Date(nddValue.replace(/\//g, '-'));
     } else if (nddValue.match(/^\d{2}\/\d{2}$/)) {
-      // 格式为 MM/DD（按年缴费，每年提醒）
       const [month, day] = nddValue.split('/').map(Number);
-      expiry = new Date(currentYear, month - 1, day); // month - 1 因为 Date 使用 0-11
-      // 如果当前年份的 MM/DD 已过期，尝试下一年
+      expiry = new Date(currentYear, month - 1, day);
       if (expiry < currentDate) {
         expiry = new Date(currentYear + 1, month - 1, day);
       }
     } else if (nddValue.match(/^\d{1,2}$/)) {
-      // 格式为 DD（按月缴费，每月提醒）
       const day = parseInt(nddValue, 10);
       expiry = new Date(currentYear, currentMonth, day);
-      // 如果当前月份的 DD 已过期，尝试下个月
       if (expiry < currentDate) {
         expiry = new Date(currentYear, currentMonth + 1, day);
       }
     } else {
-      console.error('Invalid ndd format:', nddValue);
       return false;
     }
 
     if (isNaN(expiry.getTime())) {
-      console.error('Invalid date parsed from ndd:', nddValue);
       return false;
     }
 
     const diffTime = expiry.getTime() - currentDate.getTime();
     const diffDays = diffTime / (1000 * 3600 * 24);
-    console.log(`Server: ${server.name}, Expiry: ${expiry.toISOString()}, DiffDays: ${diffDays}, IsNearExpiry: ${diffDays <= 7 && diffDays >= 0}`);
     return diffDays <= 7 && diffDays >= 0;
   } catch (e) {
-    console.error('Error parsing ndd:', nddValue || 'undefined', e);
     return false;
   }
 }
@@ -180,7 +168,6 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
   let { servers, updated } = props;
 
   servers = servers || [];
-  console.log('Servers data:', servers); // 调试数据
   updated = updated || '0';
   const updatedInt = parseInt(updated, 10) * 1000;
   const updatedTime = formatDateTime(new Date(updatedInt));
