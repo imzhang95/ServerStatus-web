@@ -176,7 +176,7 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={3} sm={3} md={1} lg={1}>{onlineTag(server.online4, 'IPv4')}</Col>
           <Col xs={0} sm={0} md={1} lg={1}>{onlineTag(server.online6, 'IPv6')}</Col>
           <Col xs={5} sm={4} md={2} lg={2}>
-            <span style={{ color: isNearExpiry(server.expiry_date) ? '#ff0000' : 'inherit' }}>
+            <span style={{ color: isNearExpiry(server.expiry_date) ? '#8B0000' : 'inherit' }}>
               {server.alias || server.name}
             </span>
           </Col>
