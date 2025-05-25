@@ -149,6 +149,12 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
   let { servers, updated } = props;
 
   servers = servers || [];
+  console.log('Servers data:', servers); // 调试数据
+  console.log('Expiry check:', servers.map(s => ({
+    name: s.name,
+    expiry_date: s.expiry_date,
+    isNearExpiry: isNearExpiry(s.expiry_date)
+  })));
   updated = updated || '0';
   const updatedInt = parseInt(updated, 10) * 1000;
   const updatedTime = formatDateTime(new Date(updatedInt));
