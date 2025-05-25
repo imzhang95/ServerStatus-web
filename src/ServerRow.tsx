@@ -123,24 +123,29 @@ function isNearExpiry(server: RawData): boolean {
     return false;
   }
 
+  let nddValue: string | undefined = nddMatch[1]; // 捕获完整匹配（YYYY/MM/DD、MM/DD 或 DD）
   try {
     let expiry: Date;
-    const nddValue = nddMatch[1]; 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth(); // 0-11
 
     if (nddValue.match(/^\d{4}\/\d{2}\/\d{2}$/)) {
-      expiry = new Date(nddValue.replace(/\//g, '-')); 
+      // 格式为 YYYY/MM/DD（兼容旧数据）
+      expiry = new Date(nddValue.replace(/\//g, '-')); // 转换为 YYYY-MM-DD
     } else if (nddValue.match(/^\d{2}\/\d{2}$/)) {
+      // 格式为 MM/DD（按年缴费，每年提醒）
       const [month, day] = nddValue.split('/').map(Number);
-      expiry = new Date(currentYear, month - 1, day); 
+      expiry = new Date(currentYear, month - 1, day); // month - 1 因为 Date 使用 0-11
+      // 如果当前年份的 MM/DD 已过期，尝试下一年
       if (expiry < currentDate) {
         expiry = new Date(currentYear + 1, month - 1, day);
       }
     } else if (nddValue.match(/^\d{1,2}$/)) {
+      // 格式为 DD（按月缴费，每月提醒）
       const day = parseInt(nddValue, 10);
       expiry = new Date(currentYear, currentMonth, day);
+      // 如果当前月份的 DD 已过期，尝试下个月
       if (expiry < currentDate) {
         expiry = new Date(currentYear, currentMonth + 1, day);
       }
@@ -159,7 +164,7 @@ function isNearExpiry(server: RawData): boolean {
     console.log(`Server: ${server.name}, Expiry: ${expiry.toISOString()}, DiffDays: ${diffDays}`);
     return diffDays <= 7 && diffDays >= 0;
   } catch (e) {
-    console.error('Error parsing ndd:', nddValue, e);
+    console.error('Error parsing ndd:', nddValue || 'undefined', e);
     return false;
   }
 }
@@ -175,6 +180,7 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
   let { servers, updated } = props;
 
   servers = servers || [];
+  console.log('Servers data:', servers); // 调试数据
   updated = updated || '0';
   const updatedInt = parseInt(updated, 10) * 1000;
   const updatedTime = formatDateTime(new Date(updatedInt));
