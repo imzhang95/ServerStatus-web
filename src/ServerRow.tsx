@@ -37,6 +37,7 @@ interface RawData {
   'hdd_used': number;
   labels: string;
   custom?: string;
+  expiry_date?: string; // 新增到期日期字段
 }
 
 interface SergateData {
@@ -124,6 +125,19 @@ function formatDateTime(time: Date) {
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
+function isNearExpiry(expiryDate: string | undefined): boolean {
+  if (!expiryDate) return false;
+  try {
+    const expiry = new Date(expiryDate);
+    const currentDate = new Date();
+    const diffTime = expiry.getTime() - currentDate.getTime();
+    const diffDays = diffTime / (1000 * 3600 * 24);
+    return diffDays <= 7 && diffDays >= 0;
+  } catch (e) {
+    return false; 
+  }
+}
+
 interface FlagProps {
   loc: string
 }
@@ -145,7 +159,11 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
       <Row className="sr-head" justify="space-around" gutter={10}>
         <Col xs={3} sm={3} md={1} lg={1}>IPv4</Col>
         <Col xs={0} sm={0} md={1} lg={1}>IPv6</Col>
-        <Col xs={5} sm={4} md={2} lg={2}>{intl.get('NAME')}</Col>
+        <Col xs={5} sm={4} md={2} lg={2}>
+          <span style={{ color: isNearExpiry(server.expiry_date) ? '#8B0000' : 'inherit' }}>
+            {server.alias || server.name}
+          </span>
+        </Col>
         <Col xs={0} sm={2} md={1} lg={1}>{intl.get('TYPE')}</Col>
         <Col xs={2} sm={2} md={1} lg={1}>{intl.get('LOC')}</Col>
         <Col xs={4} sm={4} md={3} lg={2}>{intl.get('UPTIME')}</Col>
