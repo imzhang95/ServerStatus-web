@@ -4,7 +4,7 @@
 import React, { ReactNode } from 'react';
 import intl from 'react-intl-universal';
 import {
-  Row, Col, Progress, Tooltip, Alert,
+  Row, Col, Progress, Alert,
 } from 'antd';
 import {
   CheckCircleFilled,
@@ -208,11 +208,9 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={3} sm={3} md={1} lg={1}>{onlineTag(server.online4, 'IPv4')}</Col>
           <Col xs={0} sm={0} md={1} lg={1}>{onlineTag(server.online6, 'IPv6')}</Col>
           <Col xs={5} sm={4} md={2} lg={2}>
-            <Tooltip title={`Expiry: ${server.labels.match(/ndd=((\d{4}\/\d{2}\/\d{2})|(\d{2}\/\d{2})|(\d{1,2}))/)?.[1] || 'N/A'}, Near Expiry: ${isNearExpiry(server)}`}>
-              <span style={{ color: isNearExpiry(server) ? '#ff0000' : 'inherit' }}>
-                {server.alias || server.name}
-              </span>
-            </Tooltip>
+            <span style={{ color: isNearExpiry(server) ? '#8B0000' : 'inherit' }}>
+              {server.alias || server.name}
+            </span>
           </Col>
           <Col xs={0} sm={2} md={1} lg={1}>{server.type}</Col>
           <Col xs={2} sm={2} md={1} lg={1}><Flag loc={server.location} /></Col>
@@ -229,19 +227,13 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
             <span className="network-value-out">{monthTraffic(server.network_out, server.last_network_out)}</span>
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
-            <Tooltip placement="left" title={server.labels}>
-              <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={server.cpu} status="active" />
-            </Tooltip>
+            <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={server.cpu} status="active" />
           </Col>
           <Col xs={3} sm={3} md={3} lg={3}>
-            <Tooltip placement="left" title={memTips(server)}>
-              <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.memory_used / server.memory_total) * 100).toFixed(1))} status="active" />
-            </Tooltip>
+            <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.memory_used / server.memory_total) * 100).toFixed(1))} status="active" />
           </Col>
           <Col xs={4} sm={3} md={3} lg={3}>
-            <Tooltip placement="left" title={`${bytesToSize(server.hdd_used * 1024)}/${bytesToSize(server.hdd_total * 1024)}`}>
-              <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.hdd_used / server.hdd_total) * 100).toFixed(1))} status="active" />
-            </Tooltip>
+            <Progress className="sg-progress" strokeLinecap="square" strokeWidth={12} percent={parseFloat(((server.hdd_used / server.hdd_total) * 100).toFixed(1))} status="active" />
           </Col>
         </Row>
       )) : (
