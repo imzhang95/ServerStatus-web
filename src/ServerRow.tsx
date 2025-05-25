@@ -37,7 +37,6 @@ interface RawData {
   'hdd_used': number;
   labels: string;
   custom?: string;
-  expiry_date?: string; // 新增到期日期字段
 }
 
 interface SergateData {
@@ -46,7 +45,6 @@ interface SergateData {
 }
 
 function onlineTag(online: boolean, label: string): React.ReactElement {
-  //return <Tag color={online ? '#87d068' : '#f50'}>{online ? 'O N' : 'OFF'}</Tag>;
   return online ? <CheckCircleFilled /> : <WarningFilled />;
 }
 
@@ -64,7 +62,7 @@ function netspeed(speedValue: string): ReactNode {
 
 function monthTraffic(BandValue: number, lastBandValue: number, precision: number = 1): string {
   const trafficDiff = BandValue - lastBandValue;
-  return networkUnit(trafficDiff, precision=1);
+  return networkUnit(trafficDiff, precision);
 }
 
 function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
@@ -77,39 +75,29 @@ function bytesToSize(bytes: number, precision: number = 1, si: number = 0) {
   if (bytes >= 0 && bytes < kilobyte) {
     return `${bytes}B`;
   }
-
   if (bytes >= kilobyte && bytes < megabyte) {
     return `${(bytes / kilobyte).toFixed(precision)}K`;
   }
-
   if (bytes >= megabyte && bytes < gigabyte) {
     return `${(bytes / megabyte).toFixed(precision)}M`;
   }
-
   if (bytes >= gigabyte && bytes < terabyte) {
     return `${(bytes / gigabyte).toFixed(precision)}G`;
   }
-
   return `${(bytes / terabyte).toFixed(precision)}T`;
 }
 
 function memTips(props: RawData): ReactNode {
-  const {
-    memory_used, memory_total, swap_used, swap_total,
-  } = props;
+  const { memory_used, memory_total, swap_used, swap_total } = props;
   return (
     <dl>
       <dt>Mem:</dt>
       <dd>
-        {bytesToSize(memory_used)}
-        /
-        {bytesToSize(memory_total)}
+        {bytesToSize(memory_used)} / {bytesToSize(memory_total)}
       </dd>
       <dt>Swap:</dt>
       <dd>
-        {bytesToSize(swap_used)}
-        /
-        {bytesToSize(swap_total)}
+        {bytesToSize(swap_used)} / {bytesToSize(swap_total)}
       </dd>
     </dl>
   );
@@ -125,16 +113,54 @@ function formatDateTime(time: Date) {
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
-function isNearExpiry(expiryDate: string | undefined): boolean {
-  if (!expiryDate) return false;
+// 从 labels 的 ndd 字段解析到期日期，支持 MM/DD（每年提醒）、DD（每月提醒）和 YYYY/MM/DD（兼容旧数据）
+function isNearExpiry(server: RawData): boolean {
+  const labels = server.labels || '';
+  // 匹配 ndd=MM/DD、ndd=DD 或 ndd=YYYY/MM/DD
+  const nddMatch = labels.match(/ndd=((\d{4}\/\d{2}\/\d{2})|(\d{2}\/\d{2})|(\d{1,2}))/);
+  if (!nddMatch) {
+    console.warn('No ndd found in labels:', labels);
+    return false;
+  }
+
   try {
-    const expiry = new Date(expiryDate);
+    let expiry: Date;
+    const nddValue = nddMatch[1]; 
     const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); // 0-11
+
+    if (nddValue.match(/^\d{4}\/\d{2}\/\d{2}$/)) {
+      expiry = new Date(nddValue.replace(/\//g, '-')); 
+    } else if (nddValue.match(/^\d{2}\/\d{2}$/)) {
+      const [month, day] = nddValue.split('/').map(Number);
+      expiry = new Date(currentYear, month - 1, day); 
+      if (expiry < currentDate) {
+        expiry = new Date(currentYear + 1, month - 1, day);
+      }
+    } else if (nddValue.match(/^\d{1,2}$/)) {
+      const day = parseInt(nddValue, 10);
+      expiry = new Date(currentYear, currentMonth, day);
+      if (expiry < currentDate) {
+        expiry = new Date(currentYear, currentMonth + 1, day);
+      }
+    } else {
+      console.error('Invalid ndd format:', nddValue);
+      return false;
+    }
+
+    if (isNaN(expiry.getTime())) {
+      console.error('Invalid date parsed from ndd:', nddValue);
+      return false;
+    }
+
     const diffTime = expiry.getTime() - currentDate.getTime();
     const diffDays = diffTime / (1000 * 3600 * 24);
+    console.log(`Server: ${server.name}, Expiry: ${expiry.toISOString()}, DiffDays: ${diffDays}`);
     return diffDays <= 7 && diffDays >= 0;
   } catch (e) {
-    return false; 
+    console.error('Error parsing ndd:', nddValue, e);
+    return false;
   }
 }
 
@@ -149,12 +175,6 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
   let { servers, updated } = props;
 
   servers = servers || [];
-  console.log('Servers data:', servers); // 调试数据
-  console.log('Expiry check:', servers.map(s => ({
-    name: s.name,
-    expiry_date: s.expiry_date,
-    isNearExpiry: isNearExpiry(s.expiry_date)
-  })));
   updated = updated || '0';
   const updatedInt = parseInt(updated, 10) * 1000;
   const updatedTime = formatDateTime(new Date(updatedInt));
@@ -182,9 +202,11 @@ const ServerRow: React.FC<SergateData> = (props: SergateData) => {
           <Col xs={3} sm={3} md={1} lg={1}>{onlineTag(server.online4, 'IPv4')}</Col>
           <Col xs={0} sm={0} md={1} lg={1}>{onlineTag(server.online6, 'IPv6')}</Col>
           <Col xs={5} sm={4} md={2} lg={2}>
-            <span style={{ color: isNearExpiry(server.expiry_date) ? '#8B0000' : 'inherit' }}>
-              {server.alias || server.name}
-            </span>
+            <Tooltip title={`Expiry: ${server.labels.match(/ndd=((\d{4}\/\d{2}\/\d{2})|(\d{2}\/\d{2})|(\d{1,2}))/)?.[1] || 'N/A'}, Near Expiry: ${isNearExpiry(server)}`}>
+              <span style={{ color: isNearExpiry(server) ? '#ff0000 !important' : 'inherit' }}>
+                {server.alias || server.name}
+              </span>
+            </Tooltip>
           </Col>
           <Col xs={0} sm={2} md={1} lg={1}>{server.type}</Col>
           <Col xs={2} sm={2} md={1} lg={1}><Flag loc={server.location} /></Col>
