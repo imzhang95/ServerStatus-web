@@ -21,7 +21,7 @@ const App: React.FC<any> = () => {
   const [isOnline, setIsOnline] = useState(false);
   const [initDone, setInitDone] = useState(false);
 
-  // 【修改 1】状态增加一种，且默认值设为 'no-container' (仅非容器)
+  // 状态增加一种，且默认值设为 'no-container' (仅非容器)
   const [filterType, setFilterType] = useState<'all' | 'container' | 'no-container'>('no-container');
   
   const setCurrentLocale = (currentLocale: string) => {
@@ -74,7 +74,7 @@ const App: React.FC<any> = () => {
     };
   }, [initializeIntl]);
 
-  // 【修改 2】更新筛选逻辑：定义 nat 和 nat/6 为容器
+  // 更新筛选逻辑：定义 nat 和 nat/6 为容器
   const filteredServers = serverData.servers.filter((s: any) => {
     // 1. 获取类型并转小写
     const type = (s.type || '').toLowerCase();
@@ -83,9 +83,9 @@ const App: React.FC<any> = () => {
     const isContainer = type === 'nat' || type === 'nat/6';
 
     // 3. 根据当前 filterType 决定是否保留
-    if (filterType === 'all') return true;             // 显示全部
-    if (filterType === 'container') return isContainer; // 仅显示容器
-    if (filterType === 'no-container') return !isContainer; // 仅显示非容器 (默认)
+    if (filterType === 'all') return true;
+    if (filterType === 'container') return isContainer;
+    if (filterType === 'no-container') return !isContainer;
     
     return true;
   });
@@ -113,16 +113,14 @@ const App: React.FC<any> = () => {
           </Row>
         </Content>
         <Footer className="footer">
-          <a target="_blank" rel="noopener noreferrer" href="/detail">📂</a>
+          <a target="_blank" rel="noopener noreferrer" href="/detail">🔍</a>
           <span style={{ margin: '0 8px' }}>|</span>
           <a target="_blank" rel="noopener noreferrer" href="/map">🗺️</a>
           <span style={{ margin: '0 8px' }}>|</span>
           <span 
               onClick={() => setFilterType('all')} 
               style={{ 
-                cursor: 'pointer', 
-                fontWeight: filterType === 'all' ? 'bold' : 'normal',
-                color: filterType === 'all' ? '#1890ff' : 'inherit'
+                cursor: 'pointer'
               }}
           >
           ServerStatus
