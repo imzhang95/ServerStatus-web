@@ -113,7 +113,7 @@ const App: React.FC<any> = () => {
           </Row>
         </Content>
         <Footer className="footer">
-          <a target="_blank" rel="noopener noreferrer" href="/detail">🗂️🐣🦉🐥</a>
+          <a target="_blank" rel="noopener noreferrer" href="/detail">📂</a>
           <span style={{ margin: '0 8px' }}>|</span>
           <a target="_blank" rel="noopener noreferrer" href="/map">🗺️</a>
           <span style={{ margin: '0 8px' }}>|</span>
@@ -134,7 +134,7 @@ const App: React.FC<any> = () => {
                 cursor: 'pointer'
               }}
           >
-          🐓
+          🦉
           </span>
           <span style={{ margin: '0 8px' }}>|</span>
           <span 
@@ -143,7 +143,7 @@ const App: React.FC<any> = () => {
                 cursor: 'pointer'
               }}
           >
-          🐤
+          🐣
           </span>
         </Footer>
       </Layout>
