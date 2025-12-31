@@ -113,52 +113,38 @@ const App: React.FC<any> = () => {
           </Row>
         </Content>
         <Footer className="footer">
-          <a target="_blank" rel="noopener noreferrer" href="/detail">🗂️</a>
-          {" | ServerStatus-Rust | "}
+          <a target="_blank" rel="noopener noreferrer" href="/detail">🗂️🐣🦉🐥</a>
+          <span style={{ margin: '0 8px' }}>|</span>
           <a target="_blank" rel="noopener noreferrer" href="/map">🗺️</a>
-
-          {/* 【修改 3】底部筛选区域：三个按钮 */}
-          <div style={{ marginTop: '10px', userSelect: 'none' }}>
-            {/* 按钮 1: 仅非容器 */}
-            <span 
-              onClick={() => setFilterType('no-container')} 
-              style={{ 
-                cursor: 'pointer', 
-                fontWeight: filterType === 'no-container' ? 'bold' : 'normal',
-                color: filterType === 'no-container' ? '#1890ff' : 'inherit'
-              }}
-            >
-              [ 仅非容器 ]
-            </span>
-
-            <span style={{ margin: '0 8px' }}>|</span>
-
-            {/* 按钮 2: 仅容器 */}
-            <span 
-              onClick={() => setFilterType('container')} 
-              style={{ 
-                cursor: 'pointer', 
-                fontWeight: filterType === 'container' ? 'bold' : 'normal',
-                color: filterType === 'container' ? '#1890ff' : 'inherit'
-              }}
-            >
-              [ 仅容器 ]
-            </span>
-
-            <span style={{ margin: '0 8px' }}>|</span>
-
-            {/* 按钮 3: 显示全部 */}
-            <span 
+          <span style={{ margin: '0 8px' }}>|</span>
+          <span 
               onClick={() => setFilterType('all')} 
               style={{ 
                 cursor: 'pointer', 
                 fontWeight: filterType === 'all' ? 'bold' : 'normal',
                 color: filterType === 'all' ? '#1890ff' : 'inherit'
               }}
-            >
-              [ 全部 ]
-            </span>
-          </div>
+          >
+          ServerStatus
+          </span>
+          <span style={{ margin: '0 8px' }}>|</span>
+          <span 
+              onClick={() => setFilterType('no-container')} 
+              style={{ 
+                cursor: 'pointer'
+              }}
+          >
+          🐓
+          </span>
+          <span style={{ margin: '0 8px' }}>|</span>
+          <span 
+              onClick={() => setFilterType('container')} 
+              style={{ 
+                cursor: 'pointer'
+              }}
+          >
+          🐤
+          </span>
         </Footer>
       </Layout>
       )}
