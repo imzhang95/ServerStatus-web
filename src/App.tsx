@@ -21,8 +21,10 @@ const App: React.FC<any> = () => {
   const [isOnline, setIsOnline] = useState(false);
   const [initDone, setInitDone] = useState(false);
 
-  // 状态增加一种，且默认值设为 'no-container' (仅非容器)
+  // 增加筛选状态，且默认值设为 'no-container' (仅非容器)
   const [filterType, setFilterType] = useState<'all' | 'container' | 'no-container'>('no-container');
+  // 增加排序状态：'default' (按原JSON顺序) 或 'location' (按地区字母排序)
+  const [sortType, setSortType] = useState<'default' | 'location'>('default');
   
   const setCurrentLocale = (currentLocale: string) => {
     intl.init({
@@ -90,8 +92,21 @@ const App: React.FC<any> = () => {
     return true;
   });
 
+  // 排序逻辑
+  const sortedServers = [...filteredServers]; 
+  
+  if (sortType === 'location') {
+    sortedServers.sort((a: any, b: any) => {
+      // 获取 location 并转小写，防止大小写导致排序错乱
+      const locA = (a.location || '').toLowerCase();
+      const locB = (b.location || '').toLowerCase();
+      // 使用 localeCompare 按字母 a-z 顺序排列
+      return locA.localeCompare(locB);
+    });
+  }
+  
   // 传递过滤后的数据
-  const displayData = { ...serverData, servers: filteredServers };
+  const displayData = { ...serverData, servers: sortedServers };
   
   return (
     <div className="App">
@@ -142,6 +157,16 @@ const App: React.FC<any> = () => {
               }}
           >
           🐣
+          </span>
+          // 排序切换按钮
+          <span style={{ margin: '0 8px' }}>|</span>
+          <span
+            onClick={() => setSortType(sortType === 'default' ? 'location' : 'default')}
+            style={{
+              cursor: 'pointer'
+            }}
+          >
+            {sortType === 'default' ? '🏁' : '🏴‍☠️'}
           </span>
         </Footer>
       </Layout>
