@@ -158,7 +158,6 @@ const App: React.FC<any> = () => {
           >
           🐣
           </span>
-          // 排序切换按钮
           <span style={{ margin: '0 8px' }}>|</span>
           <span
             onClick={() => setSortType(sortType === 'default' ? 'location' : 'default')}
